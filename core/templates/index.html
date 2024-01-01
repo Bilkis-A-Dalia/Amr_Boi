@@ -1,0 +1,81 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+
+<div class="d-flex flex-wrap align-items-center px-3 pt-4">
+  <div class="col-6">
+    <h1>Welcome to Amr Boi</h1>
+    <p>
+      "Amr Boi," as a new library, likely represents a promising addition to the
+      community's literary landscape. This library might serve as a hub for
+      knowledge, offering a diverse range of books to cater to various interests
+      and preferences. Whether it's a physical space, a digital platform, or a
+      combination of both, "Amr Boi" could become a haven for book enthusiasts,
+      fostering a love for reading and providing a space for intellectual
+      exploration. The name itself, with "Amr" meaning "my" and "Boi" meaning
+      "book" in Bengali, suggests a personalized and intimate connection with
+      literature. This library may not only provide access to a wealth of
+      information but also contribute to building a sense of community among
+      readers who share a passion for books and learning.
+    </p>
+  </div>
+  <div class="col-6">
+    <img class="img-fluid" src="{% static 'header.png'%}" alt="Logo" />
+  </div>
+</div>
+
+<div class="d-flex flex-wrap p-4">
+  <div class="col-md-2 bg-white p-3 shadow p-3 mb-5 bg-white rounded">
+    <h5>All Categories</h5>
+    {% for cat in categories %}
+    <div class="form-check">
+      <input
+        class="form-check-input"
+        type="radio"
+        name="category"
+        id="{{ cat.id }}"
+      />
+      <label class="form-check-label" for="{{ cat.id }}">
+        <a
+          href="{% url 'category_wise_book' cat.slug %}"
+          class="text-decoration-none text-dark"
+          >{{ cat.name }}</a
+        >
+      </label>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="col-10 p-3">
+    <h4>{{ data|length }} results found</h4>
+    <div class="d-flex flex-wrap pt-5">
+      {% for book in data %}
+      <div class="col-sm-3">
+        <div class="card m-2 shadow p-3 mb-5 bg-white rounded">
+          <div class="card-body">
+            <img
+              src="{{ book.image.url }}"
+              class="card-img-top"
+              alt="book_image"
+            />
+            <h5 class="card-title">
+              <a
+                class="text-decoration-none text-dark"
+                href="{% url 'detail_books' book.id %}"
+                >{{ book.title }}</a
+              >
+            </h5>
+            <p class="card-text">{{ book.description | truncatewords:10 }}</p>
+            <p>
+              Category: {% for cat in book.category.all %}
+              <button class="btn btn-primary btn-sm m-2" disabled>
+                {{ cat.name }}
+              </button>
+              {% endfor %}
+            </p>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}

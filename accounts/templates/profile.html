@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Book Name</th>
+        <th scope="col">Book Price</th>
+        <th scope="col">Borrow Date</th>
+        <th scope="col">User Balance After Borrow</th>
+        <th scope="col">Return Book</th>
+        <th scope="col">Review</th> 
+      </tr>
+    </thead>
+    <tbody>
+      {% for borrow in books %}
+        <tr>
+          <th scope="row">{{ forloop.counter }}</th>
+          <td>{{ borrow.book.title }}</td>
+          <td>{{ borrow.book.borrowing_price }}</td>
+          <td>{{ borrow.borrow_date}}</td>
+          <td>{{ borrow.balance_after_borrow }}</td>
+          <td>
+            {% if not borrow.is_returned %}
+              <form method="post" action="{% url 'return_book' borrow.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Return Book</button>
+              </form>
+            {% else %}
+              <span class="badge badge-success">Returned</span>
+            {% endif %}
+          </td>
+          <td>
+              <a href="{% url 'detail_books' borrow.book.id %}" class="btn btn-info">Review Book</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
